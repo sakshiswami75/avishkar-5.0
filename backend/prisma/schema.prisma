@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Registration {
+  id           String        @id
+  eventId      String
+  eventName    String
+  college      String
+  createdAt    DateTime      @default(now())
+  participants Participant[]
+}
+
+model Participant {
+  id             Int          @id @default(autoincrement())
+  name           String
+  mobile         String
+  standard       String
+  registrationId String
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+}
