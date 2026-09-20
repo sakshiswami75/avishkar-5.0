@@ -48,9 +48,6 @@ type Registration = {
   createdAt: string
 }
 
-const image = (id: string) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=82`
-
 const EVENTS: Event[] = [
   {
     id: 'drawing',
@@ -58,7 +55,7 @@ const EVENTS: Event[] = [
     group: 'Creative',
     teamSize: 1,
     accent: 'pink',
-    image: image('photo-1547891654-e66ed7ebb968'),
+    image: '/events/drawing.jpg',
     description: 'Turn an empty canvas into a world of your own.',
     prize: 'Prize details to be announced',
     rules: [
@@ -76,7 +73,7 @@ const EVENTS: Event[] = [
     group: 'Creative',
     teamSize: 2,
     accent: 'orange',
-    image: image('photo-1582562124811-c09040d0a901'),
+    image: '/events/Rangoli.webp',
     description: 'Create colour, symmetry and wonder on the floor.',
     prize: 'Prize details to be announced',
     rules: [
@@ -93,7 +90,7 @@ const EVENTS: Event[] = [
     group: 'Creative',
     teamSize: 2,
     accent: 'pink',
-    image: image('photo-1516979187457-637abb4f9353'),
+    image: '/events/mehndi.jpeg',
     description: 'Precision, patterns and a signature touch.',
     prize: 'Prize details to be announced',
     rules: [
@@ -110,7 +107,7 @@ const EVENTS: Event[] = [
     group: 'Cultural',
     teamSize: 1,
     accent: 'violet',
-    image: image('photo-1508700115892-45ecd05ae2ad'),
+    image: '/events/solo-dance.jpg',
     description: 'Own the stage. Make every beat yours.',
     prize: 'Prize details to be announced',
     rules: [
@@ -127,7 +124,7 @@ const EVENTS: Event[] = [
     group: 'Cultural',
     teamSize: { min: 2, max: 12 },
     accent: 'violet',
-    image: image('photo-1517457373958-b7bdd4587245'),
+    image: '/events/group-dance.webp',
     description: 'Bring your crew and make the room move.',
     prize: 'Prize details to be announced',
     rules: [
@@ -139,12 +136,31 @@ const EVENTS: Event[] = [
   },
 
   {
+    id: 'solo-singing',
+    name: 'Solo Singing',
+    group: 'Cultural',
+    teamSize: 1,
+    accent: 'pink',
+    image: '/events/solo-singing.jpg',
+    description:
+      'Step onto the stage, own the spotlight, and let your voice shine.',
+    prize: 'Prize details to be announced',
+    rules: [
+      'Only 1 participant allowed.',
+      'Bring backing track if required.',
+      'Performance details will be shared soon.',
+    ],
+    faculty: ['Shruti Mam', 'Amruta Mam'],
+    icon: Play,
+  },
+
+  {
     id: 'singing',
     name: 'Group Singing',
     group: 'Cultural',
     teamSize: { min: 2, max: 6 },
     accent: 'blue',
-    image: image('photo-1516280440614-37939bbacd81'),
+    image: '/events/group-singing.jpg',
     description: 'Bring your voices together and own the stage.',
     prize: 'Prize details to be announced',
     rules: [
@@ -162,8 +178,7 @@ const EVENTS: Event[] = [
     group: 'Gaming',
     teamSize: 1,
     accent: 'blue',
-    image:
-      'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=82',
+    image: '/events/PUBG-solo.jpg',
     description: 'Stay sharp. Survive longer. Take the win.',
     prize: 'Prize details to be announced',
     rules: [
@@ -180,8 +195,7 @@ const EVENTS: Event[] = [
     group: 'Gaming',
     teamSize: 4,
     accent: 'blue',
-    image:
-      'https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=900&q=82',
+    image: '/events/PUBG-Squad.jpg',
     description: 'Four players. One strategy. No second chances.',
     prize: 'Prize details to be announced',
     rules: [
@@ -198,8 +212,7 @@ const EVENTS: Event[] = [
     group: 'Gaming',
     teamSize: 1,
     accent: 'orange',
-    image:
-      'https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=900&q=82',
+    image: '/events/free-fire.jpg',
     description: 'Fast decisions for players who never back down.',
     prize: 'Prize details to be announced',
     rules: [
@@ -216,8 +229,7 @@ const EVENTS: Event[] = [
     group: 'Gaming',
     teamSize: 4,
     accent: 'orange',
-    image:
-      'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=82',
+    image: '/events/freefire-squad.jpg',
     description: 'Squad up and make your mark on the arena.',
     prize: 'Prize details to be announced',
     rules: [
@@ -234,7 +246,7 @@ const EVENTS: Event[] = [
     group: 'Challenge & Fun',
     teamSize: 2,
     accent: 'blue',
-    image: image('photo-1523240795612-9a054b0db644'),
+    image: '/events/Quiz.jpg',
     description: 'Fast minds, bold answers and one winning pair.',
     prize: 'Prize details to be announced',
     rules: [
@@ -251,7 +263,7 @@ const EVENTS: Event[] = [
     group: 'Challenge & Fun',
     teamSize: 2,
     accent: 'orange',
-    image: image('photo-1516979187457-637abb4f9353'),
+    image: '/events/treasure-hunt.jpeg',
     description: 'Decode clues. Chase the trail. Find the prize.',
     prize: 'Prize details to be announced',
     rules: [
@@ -268,7 +280,7 @@ const EVENTS: Event[] = [
     group: 'Challenge & Fun',
     teamSize: 8,
     accent: 'pink',
-    image: image('photo-1552674605-db6ffd4facb5'),
+    image: '/events/Tug-of-war.jpg',
     description: 'Eight on a rope. One team left standing.',
     prize: 'Prize details to be announced',
     rules: [
@@ -280,12 +292,12 @@ const EVENTS: Event[] = [
   },
 
   {
-    id: 'rodies',
-    name: 'Rodies',
+    id: 'roadies',
+    name: 'Roadies',
     group: 'Challenge & Fun',
     teamSize: 2,
     accent: 'pink',
-    image: image('photo-1517245386807-bb43f82c33c4'),
+    image: '/events/roadies.jpg',
     description: 'Courage, chaos and challenges that test everything.',
     prize: 'Prize details to be announced',
     rules: [
@@ -302,8 +314,9 @@ const EVENTS: Event[] = [
     group: 'Digital',
     teamSize: 2,
     accent: 'violet',
-    image: image('photo-1516035069371-29a1b244cc32'),
-    description: 'Capture the energy. Create the moment. Share the story.',
+    image: '/events/photo-reels.jpeg',
+    description:
+      'Capture the energy. Create the moment. Share the story.',
     prize: 'Prize details to be announced',
     rules: [
       'Teams of two participants.',
