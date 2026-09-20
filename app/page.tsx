@@ -421,7 +421,7 @@ export default function Page() {
     return !next.length
   }
 
-  const submit = () => {
+  const submit = async () => {
     if (!selected || !validate()) return
 
     const entry: Registration = {
@@ -433,14 +433,18 @@ export default function Page() {
       createdAt: new Date().toISOString(),
     }
 
-    const next = [...registrations, entry]
+    try {
+      const res = await fetch(`http://localhost:5000/api/events/${selected.id}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entry),
+      })
+      if (!res.ok) throw new Error('Registration failed')
+    } catch (e) {
+      setErrors(['Failed to register. Please try again.'])
+      return
+    }
 
-    localStorage.setItem(
-      'avishkar-registrations',
-      JSON.stringify(next),
-    )
-
-    setRegistrations(next)
     setRegistration(entry)
     setScreen('success')
 
@@ -642,6 +646,9 @@ export default function Page() {
             <span>
               Registration information will be announced soon.
             </span>
+            <a href="/admin" style={{ display: 'block', marginTop: '16px', color: '#666', textDecoration: 'underline' }}>
+              Organizer Admin Login
+            </a>
           </footer>
         </>
       )}
