@@ -23,7 +23,9 @@ export default function AdminPage() {
     try { 
       const token = sessionStorage.getItem('avishkar-admin-token'); 
       if (!token) return; 
-      const res = await fetch('http://localhost:5000/api/events/all/summary', { headers: { Authorization: `Bearer ${token}` } }); 
+const res = await fetch('/api/events/all/summary', {
+  headers: { Authorization: `Bearer ${token}` }
+});
       const json = await res.json(); 
       if (json.success) setSummary(json.data); 
     } catch { setSummary([]) } 
@@ -33,7 +35,7 @@ export default function AdminPage() {
     try {
       const token = sessionStorage.getItem('avishkar-admin-token');
       if (!token) return;
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/registrations`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`/api/events/${eventId}/registrations`, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (json.success) setRegistrations(json.data);
     } catch { setRegistrations([]) }
@@ -57,7 +59,7 @@ export default function AdminPage() {
     e.preventDefault(); 
     if (!email.trim() || !password.trim()) { setAuthMessage('Enter credentials to continue.'); return; } 
     try { 
-      const res = await fetch('http://localhost:5000/api/auth/admin/login', { 
+      const res = await fetch('/api/auth/admin/login', { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ email, password }) 
@@ -78,7 +80,7 @@ export default function AdminPage() {
     const token = sessionStorage.getItem('avishkar-admin-token'); 
     if (!token) return; 
     try { 
-      const res = await fetch(`http://localhost:5000/api/events/registrations/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }); 
+      const res = await fetch(`/api/events/registrations/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }); 
       if (res.ok) { setRegistrations(prev => prev.filter(r => r.id !== id)); loadSummary(); } 
     } catch (e) {} 
   }
@@ -88,7 +90,7 @@ export default function AdminPage() {
     if (!token) return;
     
     // We can just redirect to the endpoint or fetch and trigger download
-    fetch(`http://localhost:5000/api/events/${eventId}/registrations/export`, {
+    fetch(`/api/events/${eventId}/registrations/export`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
