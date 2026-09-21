@@ -447,8 +447,8 @@ export default function Page() {
     }
 
     try {
-const res = await fetch(`/api/events/${selected.id}/register`, {
-          method: 'POST',
+const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${selected.id}/register`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(entry),
       })

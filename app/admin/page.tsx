@@ -23,7 +23,7 @@ export default function AdminPage() {
     try { 
       const token = sessionStorage.getItem('avishkar-admin-token'); 
       if (!token) return; 
-const res = await fetch('/api/events/all/summary', {
+const res = await fetch('https://avishkar-5-0.onrender.com/api/events/all/summary', {
   headers: { Authorization: `Bearer ${token}` }
 });
       const json = await res.json(); 
@@ -35,7 +35,7 @@ const res = await fetch('/api/events/all/summary', {
     try {
       const token = sessionStorage.getItem('avishkar-admin-token');
       if (!token) return;
-      const res = await fetch(`/api/events/${eventId}/registrations`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${eventId}/registrations`, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (json.success) setRegistrations(json.data);
     } catch { setRegistrations([]) }
@@ -59,7 +59,7 @@ const res = await fetch('/api/events/all/summary', {
     e.preventDefault(); 
     if (!email.trim() || !password.trim()) { setAuthMessage('Enter credentials to continue.'); return; } 
     try { 
-      const res = await fetch('/api/auth/admin/login', { 
+      const res = await fetch('https://avishkar-5-0.onrender.com/api/auth/admin/login', { 
         method: 'POST', 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ email, password }) 
@@ -80,7 +80,7 @@ const res = await fetch('/api/events/all/summary', {
     const token = sessionStorage.getItem('avishkar-admin-token'); 
     if (!token) return; 
     try { 
-      const res = await fetch(`/api/events/registrations/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }); 
+      const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/registrations/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }); 
       if (res.ok) { setRegistrations(prev => prev.filter(r => r.id !== id)); loadSummary(); } 
     } catch (e) {} 
   }
@@ -90,7 +90,7 @@ const res = await fetch('/api/events/all/summary', {
     if (!token) return;
     
     // We can just redirect to the endpoint or fetch and trigger download
-    fetch(`/api/events/${eventId}/registrations/export`, {
+    fetch(`https://avishkar-5-0.onrender.com/api/events/${eventId}/registrations/export`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
