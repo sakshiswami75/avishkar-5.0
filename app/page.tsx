@@ -523,16 +523,21 @@ export default function Page() {
   const [copied, setCopied] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
 
   useEffect(() => {
-    try {
-      setRegistrations(
-        JSON.parse(
-          localStorage.getItem('avishkar-registrations') || '[]',
-        ),
-      )
-    } catch {}
-  }, [])
+  try {
+    setRegistrations(
+      JSON.parse(
+        localStorage.getItem('avishkar-registrations') || '[]',
+      ),
+    )
+  } catch {}
+
+  fetch('https://avishkar-5-0.onrender.com/health').catch(() => {
+    // Backend may be waking up.
+  })
+}, [])
 
   const grouped = useMemo(
     () =>
