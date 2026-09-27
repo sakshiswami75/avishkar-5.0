@@ -1,18 +1,46 @@
 import { Request, Response } from 'express';
 import prisma from '../config/db';
 
-export const registerController = async (req: Request, res: Response): Promise<void> => {
+export const registerController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { id, eventId, eventName, college, participants } = req.body;
 
-    if (!eventId || !eventName || !college || !participants || participants.length === 0) {
-      res.status(400).json({ success: false, message: 'Invalid data: Missing required fields' });
+    if (
+      !id ||
+      !eventId ||
+      !eventName ||
+      !college ||
+      !participants ||
+      participants.length === 0
+    ) {
+      res.status(400).json({
+        success: false,
+        message: 'Invalid data: Missing required fields',
+      });
+      return;
+    }
+
+    const existingRegistration = await prisma.registration.findUnique({
+      where: { id },
+    });
+
+    if (existingRegistration) {
+      res.status(200).json({
+        success: true,
+        message: 'Registration already submitted',
+        registrationId: existingRegistration.id,
+        registration: existingRegistration,
+        alreadyExists: true,
+      });
       return;
     }
 
     const registration = await prisma.registration.create({
       data: {
-        id: id || `AVK-${Date.now().toString().slice(-6)}`,
+        id,
         eventId,
         eventName,
         college,
@@ -31,10 +59,15 @@ export const registerController = async (req: Request, res: Response): Promise<v
       message: 'Registration successful',
       registrationId: registration.id,
       registration,
+      alreadyExists: false,
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ success: false, message: 'Server error during registration' });
+
+    res.status(500).json({
+      success: false,
+      message: 'Server error during registration',
+    });
   }
 };
 

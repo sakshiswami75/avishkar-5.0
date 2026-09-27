@@ -5,6 +5,13 @@ import authRoutes from './routes/auth.routes';
 
 const app = express();
 
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    status: 'awake',
+  })
+})
+
 app.use(cors());
 app.use(express.json());
 

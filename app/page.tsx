@@ -522,6 +522,7 @@ export default function Page() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [copied, setCopied] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     try {
@@ -588,7 +589,10 @@ export default function Page() {
   }
 
   const submit = async () => {
-    if (!selected || !validate()) return
+  if (isSubmitting) return
+  if (!selected || !validate()) return
+
+  setIsSubmitting(true)
 
     const entry: Registration = {
       id: `AVK-${Date.now().toString().slice(-6)}`,
@@ -606,11 +610,12 @@ const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${selected
         body: JSON.stringify(entry),
       })
       if (!res.ok) throw new Error('Registration failed')
-    } catch (e) {
-      setErrors(['Failed to register. Please try again.'])
-      return
-    }
-
+   } catch (e) {
+  setErrors(['Failed to register. Please try again.'])
+  setIsSubmitting(false)
+  return
+}
+    setIsSubmitting(false)
     setRegistration(entry)
     setScreen('success')
 
@@ -905,6 +910,7 @@ const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${selected
           errors={errors}
           setErrors={setErrors}
           submit={submit}
+          isSubmitting={isSubmitting}
           back={() => setScreen('home')}
         />
       )}
@@ -1120,266 +1126,319 @@ function RegistrationFlow({
   errors,
   setErrors,
   submit,
+  isSubmitting,
   back,
 }: any) {
   const isTeam = typeof event.teamSize !== 'number'
 
   return (
     <section className="registration-page">
-      <button className="back-link" onClick={back}>
-        <ArrowLeft />
-        Back to events
+  <button className="back-link" onClick={back}>
+    <ArrowLeft />
+    Back to events
+  </button>
+
+  <div className="registration-heading">
+    <p className="eyebrow">
+      REGISTRATION / {event.group.toUpperCase()}
+    </p>
+
+    <h1>
+      Join <em>{event.name}</em>
+    </h1>
+
+    <p>
+      {teamLabel(event.teamSize)} · Registration is free.
+    </p>
+  </div>
+
+  <Progress step={step} />
+
+  {errors.length > 0 && (
+    <div className="error-box">
+      {errors.map((error: string) => (
+        <span key={error}>{error}</span>
+      ))}
+    </div>
+  )}
+
+  {step === 1 && (
+    <div className="form-card">
+      <h2>College details</h2>
+
+      <p>Tell us where your team is from.</p>
+
+      <label>
+        College name
+
+        <input
+          value={college}
+          onChange={(e: any) => {
+            setCollege(e.target.value);
+            setErrors([]);
+          }}
+          placeholder="Enter your college name"
+        />
+      </label>
+
+      <button
+        className="button button-primary wide"
+        onClick={() => {
+          if (!college.trim()) {
+            setErrors(['Enter your college name.']);
+            return;
+          }
+
+          setErrors([]);
+          setStep(2);
+        }}
+      >
+        Continue
+        <ArrowRight />
       </button>
+    </div>
+  )}
 
-      <div className="registration-heading">
-        <p className="eyebrow">
-          REGISTRATION / {event.group.toUpperCase()}
-        </p>
+  {step === 2 && (
+    <div className="form-card">
+      <div className="form-card-title">
+        <div>
+          <h2>Participants</h2>
 
-        <h1>
-          Join <em>{event.name}</em>
-        </h1>
+          <p>
+            Add everyone competing in this event.
+          </p>
+        </div>
 
-        <p>
-          {teamLabel(event.teamSize)} · Registration is free.
-        </p>
+        {isTeam && (
+          <div className="stepper">
+            <button
+              onClick={() =>
+                participants.length >
+                  event.teamSize.min &&
+                setParticipants((p: Participant[]) =>
+                  p.slice(0, -1),
+                )
+              }
+              disabled={
+                participants.length <=
+                event.teamSize.min
+              }
+            >
+              −
+            </button>
+
+            <strong>{participants.length}</strong>
+
+            <button
+              onClick={() =>
+                participants.length <
+                  event.teamSize.max &&
+                setParticipants((p: Participant[]) => [
+                  ...p,
+                  {
+                    name: '',
+                    mobile: '',
+                    standard: 'PUC I',
+                  },
+                ])
+              }
+              disabled={
+                participants.length >=
+                event.teamSize.max
+              }
+            >
+              +
+            </button>
+          </div>
+        )}
       </div>
 
-      <Progress step={step} />
-
-      {errors.length > 0 && (
-        <div className="error-box">
-          {errors.map((error: string) => (
-            <span key={error}>{error}</span>
-          ))}
-        </div>
-      )}
-
-      {step === 1 && (
-        <div className="form-card">
-          <h2>College details</h2>
-
-          <p>Tell us where your team is from.</p>
-
-          <label>
-            College name
-
-            <input
-              value={college}
-              onChange={(e: any) => {
-                setCollege(e.target.value)
-                setErrors([])
-              }}
-              placeholder="Enter your college name"
-            />
-          </label>
-
-          <button
-            className="button button-primary wide"
-            onClick={() =>
-              college.trim()
-                ? setStep(2)
-                : setErrors(['Enter your college name.'])
-            }
+      {participants.map(
+        (p: Participant, i: number) => (
+          <div
+            className="participant-block"
+            key={i}
           >
-            Continue
-            <ArrowRight />
-          </button>
-        </div>
-      )}
+            <h3>Participant {i + 1}</h3>
 
-      {step === 2 && (
-        <div className="form-card">
-          <div className="form-card-title">
-            <div>
-              <h2>Participants</h2>
+            <label>
+              Full name
 
-              <p>
-                Add everyone competing in this event.
-              </p>
-            </div>
+              <input
+                value={p.name}
+                onChange={(e: any) => {
+                  updateParticipant(
+                    i,
+                    'name',
+                    e.target.value,
+                  );
+                  setErrors([]);
+                }}
+                placeholder="Enter full name"
+              />
+            </label>
 
-            {isTeam && (
-              <div className="stepper">
-                <button
-                  onClick={() =>
-                    participants.length >
-                      event.teamSize.min &&
-                    setParticipants((p: Participant[]) =>
-                      p.slice(0, -1),
-                    )
-                  }
-                  disabled={
-                    participants.length <=
-                    event.teamSize.min
-                  }
-                >
-                  −
-                </button>
+            <label>
+              Mobile number
 
-                <strong>{participants.length}</strong>
+              <input
+                type="tel"
+                inputMode="numeric"
+                maxLength={10}
+                value={p.mobile}
+                onChange={(e: any) => {
+                  updateParticipant(
+                    i,
+                    'mobile',
+                    e.target.value.replace(/\D/g, ''),
+                  );
+                  setErrors([]);
+                }}
+                placeholder="10-digit mobile number"
+              />
+            </label>
 
-                <button
-                  onClick={() =>
-                    participants.length <
-                      event.teamSize.max &&
-                    setParticipants((p: Participant[]) => [
-                      ...p,
-                      {
-                        name: '',
-                        mobile: '',
-                        standard: 'PUC I',
-                      },
-                    ])
-                  }
-                  disabled={
-                    participants.length >=
-                    event.teamSize.max
-                  }
-                >
-                  +
-                </button>
-              </div>
-            )}
-          </div>
+            <label>
+              Standard
 
-          {participants.map(
-            (p: Participant, i: number) => (
-              <div
-                className="participant-block"
-                key={i}
+              <select
+                value={p.standard}
+                onChange={(e: any) => {
+                  updateParticipant(
+                    i,
+                    'standard',
+                    e.target.value,
+                  );
+                  setErrors([]);
+                }}
               >
-                <h3>Participant {i + 1}</h3>
-
-                <label>
-                  Full name
-
-                  <input
-                    value={p.name}
-                    onChange={(e: any) =>
-                      updateParticipant(
-                        i,
-                        'name',
-                        e.target.value,
-                      )
-                    }
-                    placeholder="Enter full name"
-                  />
-                </label>
-
-                <label>
-                  Mobile number
-
-                  <input
-                    inputMode="numeric"
-                    maxLength={10}
-                    value={p.mobile}
-                    onChange={(e: any) =>
-                      updateParticipant(
-                        i,
-                        'mobile',
-                        e.target.value.replace(/\D/g, ''),
-                      )
-                    }
-                    placeholder="10-digit mobile number"
-                  />
-                </label>
-
-                <label>
-                  Standard
-
-                  <select
-                    value={p.standard}
-                    onChange={(e: any) =>
-                      updateParticipant(
-                        i,
-                        'standard',
-                        e.target.value,
-                      )
-                    }
-                  >
-                    <option>PUC I</option>
-                    <option>PUC II</option>
-                  </select>
-                </label>
-              </div>
-            ),
-          )}
-
-          <div className="form-actions">
-            <button
-              className="button button-secondary"
-              onClick={() => setStep(1)}
-            >
-              Back
-            </button>
-
-            <button
-              className="button button-primary"
-              onClick={() => {
-                setErrors([])
-                setStep(3)
-              }}
-            >
-              Review
-              <ArrowRight />
-            </button>
+                <option>PUC I</option>
+                <option>PUC II</option>
+              </select>
+            </label>
           </div>
-        </div>
+        ),
       )}
 
-      {step === 3 && (
-        <div className="form-card">
-          <h2>Review your registration</h2>
+      <div className="form-actions">
+        <button
+          className="button button-secondary"
+          onClick={() => {
+            setErrors([]);
+            setStep(1);
+          }}
+        >
+          Back
+        </button>
 
-          <div className="review-row">
-            <span>Event</span>
-            <strong>{event.name}</strong>
-          </div>
+        <button
+          className="button button-primary"
+          onClick={() => {
+            const validationErrors: string[] = [];
 
-          <div className="review-row">
-            <span>College</span>
-            <strong>{college}</strong>
-          </div>
+            // Validate every participant before going to review
+            participants.forEach(
+              (p: Participant, i: number) => {
+                const participantNumber = i + 1;
 
-          <div className="review-participants">
-            <span>Participants</span>
+                if (!p.name.trim()) {
+                  validationErrors.push(
+                    `Enter the full name for Participant ${participantNumber}.`,
+                  );
+                }
 
-            {participants.map(
-              (p: Participant, i: number) => (
-                <div key={i}>
-                  <strong>
-                    {p.name ||
-                      `Participant ${i + 1}`}
-                  </strong>
+                if (!p.mobile.trim()) {
+                  validationErrors.push(
+                    `Enter the mobile number for Participant ${participantNumber}.`,
+                  );
+                } else if (!/^[6-9]\d{9}$/.test(p.mobile)) {
+                  validationErrors.push(
+                    `Enter a valid 10-digit mobile number for Participant ${participantNumber}.`,
+                  );
+                }
 
-                  <small>
-                    {p.standard} ·{' '}
-                    {p.mobile || 'Mobile pending'}
-                  </small>
-                </div>
-              ),
-            )}
-          </div>
+                if (!p.standard) {
+                  validationErrors.push(
+                    `Select the standard for Participant ${participantNumber}.`,
+                  );
+                }
+              },
+            );
 
-          <div className="form-actions">
-            <button
-              className="button button-secondary"
-              onClick={() => setStep(2)}
-            >
-              Edit details
-            </button>
+            if (validationErrors.length > 0) {
+              setErrors(validationErrors);
+              return;
+            }
 
-            <button
-              className="button button-primary"
-              onClick={submit}
-            >
-              Submit registration
-              <Check />
-            </button>
-          </div>
-        </div>
-      )}
+            setErrors([]);
+            setStep(3);
+          }}
+        >
+          Review
+          <ArrowRight />
+        </button>
+      </div>
+    </div>
+  )}
+
+  {step === 3 && (
+    <div className="form-card">
+      <h2>Review your registration</h2>
+
+      <div className="review-row">
+        <span>Event</span>
+        <strong>{event.name}</strong>
+      </div>
+
+      <div className="review-row">
+        <span>College</span>
+        <strong>{college}</strong>
+      </div>
+
+      <div className="review-participants">
+        <span>Participants</span>
+
+        {participants.map(
+          (p: Participant, i: number) => (
+            <div key={i}>
+              <strong>
+                {p.name ||
+                  `Participant ${i + 1}`}
+              </strong>
+
+              <small>
+                {p.standard} ·{' '}
+                {p.mobile || 'Mobile pending'}
+              </small>
+            </div>
+          ),
+        )}
+      </div>
+
+      <div className="form-actions">
+        <button
+          className="button button-secondary"
+          onClick={() => {
+            setErrors([]);
+            setStep(2);
+          }}
+        >
+          Edit details
+        </button>
+
+        <button
+  className="button button-primary"
+  onClick={submit}
+  disabled={isSubmitting}
+>
+  {isSubmitting ? 'Submitting...' : 'Submit registration'}
+  {!isSubmitting && <Check />}
+</button>
+      </div>
+    </div>
+  )}
+
     </section>
   )
 }
