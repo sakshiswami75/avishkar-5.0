@@ -1,5 +1,5 @@
 'use client'
-
+import { Phone } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import {
   ArrowDown,
@@ -29,7 +29,10 @@ type Event = {
   description: string
   prize: string
   rules: string[]
-  faculty: string[]
+  faculty: {
+  name: string
+  phone: string
+}
   icon: typeof Palette
 }
 
@@ -57,274 +60,424 @@ const EVENTS: Event[] = [
     accent: 'pink',
     image: '/events/drawing.jpg',
     description: 'Turn an empty canvas into a world of your own.',
-    prize: 'Prize details to be announced',
+    prize: 'Exciting Cash Prizes',
     rules: [
-      'One participant per entry.',
-      'Bring your own materials.',
-      'Theme will be shared at the venue.',
-    ],
-    faculty: ['Shruti Mam', 'Amruta Mam'],
+  'Individual participation.',
+  'Theme: Village Life.',
+  'Time limit: 2 hours.',
+  'A4 sheet or card sheet will be provided.',
+  'Participants must bring their own drawing materials.',
+  'Digital drawing is not allowed.',
+  'Mobile phones are prohibited during the event.',
+],
+    faculty: {
+  name: 'Prof. Shruti Patil',
+  phone: '8123025476',
+}
+,
     icon: Palette,
   },
 
   {
-    id: 'rangoli',
-    name: 'Rangoli',
-    group: 'Creative',
-    teamSize: 2,
-    accent: 'orange',
-    image: '/events/Rangoli.webp',
-    description: 'Create colour, symmetry and wonder on the floor.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Teams of two participants.',
-      'Materials and time limits will be shared soon.',
-    ],
-    faculty: ['Shruti Mam', 'Amruta Mam'],
-    icon: Sparkles,
+  id: 'rangoli',
+  name: 'Rangoli',
+  group: 'Creative',
+  teamSize: 2,
+  accent: 'orange',
+  image: '/events/Rangoli.webp',
+  description: 'Create colour, symmetry and wonder on the floor.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    '1–2 participants per team.',
+    'Theme: Festival and Nature.',
+    'Rangoli must strictly follow the given theme.',
+    'Time limit: 2 hours.',
+    'Bring your own Rangoli materials, such as coloured Rangoli powder.',
+    'Rangoli moulds/stencils are not allowed.',
+    'Mobile phones are strictly prohibited during the competition.',
+    'Judges’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Shruti Patil',
+    phone: '8123025476',
   },
+  icon: Sparkles,
+},
 
   {
-    id: 'mehandi',
-    name: 'Mehandi',
-    group: 'Creative',
-    teamSize: 2,
-    accent: 'pink',
-    image: '/events/mehndi.jpeg',
-    description: 'Precision, patterns and a signature touch.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Teams of two participants.',
-      'Bring your own cone and materials.',
-    ],
-    faculty: ['Shruti Mam', 'Amruta Mam'],
-    icon: Sparkles,
+  id: 'mehandi',
+  name: 'Mehandi',
+  group: 'Creative',
+  teamSize: 2,
+  accent: 'pink',
+  image: '/events/mehndi.jpeg',
+  description: 'Precision, patterns and a signature touch.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Two participants per team.',
+    'Each participant must bring their own partner for applying Mehendi.',
+    'Any type of Mehendi design is allowed.',
+    'Time limit: 2 hours.',
+    'Participants must bring their own Mehendi.',
+    'Design area: One full hand.',
+    'Mobile phones are strictly prohibited during the competition.',
+    'Judges’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Shruti Patil',
+    phone: '8123025476',
   },
+  icon: Sparkles,
+},
 
   {
-    id: 'dance-solo',
-    name: 'Dance — Solo',
-    group: 'Cultural',
-    teamSize: 1,
-    accent: 'violet',
-    image: '/events/solo-dance.jpg',
-    description: 'Own the stage. Make every beat yours.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'One participant per entry.',
-      'Performance duration will be shared soon.',
-    ],
-    faculty: ['Shruti Mam', 'Amruta Mam'],
-    icon: Play,
+  id: 'dance-solo',
+  name: 'Dance — Solo',
+  group: 'Cultural',
+  teamSize: 1,
+  accent: 'violet',
+  image: '/events/solo-dance.jpg',
+  description: 'Own the stage. Make every beat yours.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Individual participation.',
+    'Theme: Open Choice.',
+    'Performance duration: 3–5 minutes.',
+    'Participants are free to choose their song/music.',
+    'Submit the song in .mp3 format to the co-coordinator before the competition.',
+    'Participants must bring their own props, if required.',
+    'Lighting matchsticks, candles, cigarettes, or performing unsafe acts on stage is strictly prohibited.',
+    'Judging will be based on rhythm, formation, expression, costumes, and makeup.',
+    'Judges’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Amruta Patil',
+    phone: '9945053740',
   },
+  icon: Play,
+},
 
   {
-    id: 'group-dance',
-    name: 'Group Dance',
-    group: 'Cultural',
-    teamSize: { min: 2, max: 12 },
-    accent: 'violet',
-    image: '/events/group-dance.webp',
-    description: 'Bring your crew and make the room move.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Minimum 2 and maximum 12 participants.',
-      'Music and time limits will be shared soon.',
-    ],
-    faculty: ['Shruti Mam', 'Amruta Mam'],
-    icon: Users,
+  id: 'group-dance',
+  name: 'Group Dance',
+  group: 'Cultural',
+  teamSize: { min: 2, max: 12 },
+  accent: 'violet',
+  image: '/events/group-dance.webp',
+  description: 'Bring your crew and make the room move.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Minimum 2 and maximum 12 participants.',
+    'Theme: Open Choice.',
+    'Performance duration: 5–8 minutes.',
+    'Participants are free to choose their song/music.',
+    'Submit the song in .mp3 format to the co-coordinator before the competition.',
+    'Participants must bring their own props, if required.',
+    'Lighting matchsticks, candles, cigarettes, or performing unsafe acts on stage is strictly prohibited.',
+    'Judging will be based on rhythm, formation, expression, costumes, and makeup.',
+    'Judges’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Amruta Patil',
+    phone: '9945053740',
   },
+  icon: Users,
+},
 
   {
-    id: 'solo-singing',
-    name: 'Solo Singing',
-    group: 'Cultural',
-    teamSize: 1,
-    accent: 'pink',
-    image: '/events/solo-singing.jpg',
-    description:
-      'Step onto the stage, own the spotlight, and let your voice shine.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Only 1 participant allowed.',
-      'Bring backing track if required.',
-      'Performance details will be shared soon.',
-    ],
-    faculty: ['Shruti Mam', 'Amruta Mam'],
-    icon: Play,
+  id: 'solo-singing',
+  name: 'Solo Singing',
+  group: 'Cultural',
+  teamSize: 1,
+  accent: 'pink',
+  image: '/events/solo-singing.jpg',
+  description:
+    'Step onto the stage, own the spotlight, and let your voice shine.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Only 1 participant allowed.',
+    'Participants are free to choose their song/music.',
+    'Submit the song in .mp3 format to the co-coordinator before the competition.',
+    'Performance duration: 3–5 minutes.',
+    'Participants must bring their own props, if required.',
+    'Lighting matchsticks, candles, cigarettes, or performing unsafe acts on stage is strictly prohibited.',
+    'Judging will be based on voice quality, rhythm, expression, clarity, and overall performance.',
+    'Judges’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Amruta Patil',
+    phone: '9945053740',
   },
+  icon: Play,
+},
+
+{
+  id: 'singing',
+  name: 'Group Singing',
+  group: 'Cultural',
+  teamSize: { min: 2, max: 6 },
+  accent: 'blue',
+  image: '/events/group-singing.jpg',
+  description: 'Bring your voices together and own the stage.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Minimum 2 and maximum 6 participants.',
+    'Participants are free to choose their song/music.',
+    'Submit the song in .mp3 format to the co-coordinator before the competition.',
+    'Performance duration: 5–8 minutes.',
+    'Participants must bring their own props, if required.',
+    'Lighting matchsticks, candles, cigarettes, or performing unsafe acts on stage is strictly prohibited.',
+    'Judging will be based on voice quality, rhythm, expression, clarity, and overall performance.',
+    'Judges’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Amruta Patil',
+    phone: '9945053740',
+  },
+  icon: Play,
+},
 
   {
-    id: 'singing',
-    name: 'Group Singing',
-    group: 'Cultural',
-    teamSize: { min: 2, max: 6 },
-    accent: 'blue',
-    image: '/events/group-singing.jpg',
-    description: 'Bring your voices together and own the stage.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Minimum 2 and maximum 6 participants.',
-      'Bring backing track if required.',
-      'Performance details will be shared soon.',
-    ],
-    faculty: ['Shruti Mam', 'Amruta Mam'],
-    icon: Play,
+  id: 'bgmi-solo',
+  name: 'BGMI Solo',
+  group: 'Gaming',
+  teamSize: 1,
+  accent: 'blue',
+  image: '/events/PUBG-solo.jpg',
+  description: 'Stay sharp. Survive longer. Take the win.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Participants can register individually (Solo).',
+    'The competition will consist of 2 rounds of BGMI.',
+    'Participants must have their own internet connection.',
+    'Participants are advised to use a reliable internet connection.',
+    'BGMI must be installed and updated on the mobile phone before the competition.',
+    'The competition may be played on Erangel, Miramar, and Rondo maps, as decided by the organizers.',
+    'Hacks, cheats, or unauthorized third-party software are strictly prohibited.',
+    'Exploiting bugs, glitches, or game errors is strictly prohibited.',
+    'If a player disconnects after the match starts, the match will continue and no rematch will be provided.',
+    'GFX Tools or unauthorized game-enhancement tools are strictly prohibited.',
+    'Organizers’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Mrs. Ujwala Bhosale',
+    phone: '9860082930',
   },
+  icon: Gamepad2,
+},
 
   {
-    id: 'pubg-solo',
-    name: 'PUBG Solo',
-    group: 'Gaming',
-    teamSize: 1,
-    accent: 'blue',
-    image: '/events/PUBG-solo.jpg',
-    description: 'Stay sharp. Survive longer. Take the win.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'One participant per entry.',
-      'Match format will be shared soon.',
-    ],
-    faculty: ['Ujjwala Mam'],
-    icon: Gamepad2,
+  id: 'bgmi-squad',
+  name: 'BGMI Squad',
+  group: 'Gaming',
+  teamSize: 4,
+  accent: 'blue',
+  image: '/events/PUBG-Squad.jpg',
+  description: 'Four players. One strategy. No second chances.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Exactly 4 participants.',
+    'The competition will consist of 2 rounds of BGMI.',
+    'Participants must have their own internet connection.',
+    'Participants are advised to use a reliable internet connection.',
+    'BGMI must be installed and updated on the mobile phone before the competition.',
+    'The competition may be played on Erangel, Miramar, and Rondo maps, as decided by the organizers.',
+    'Hacks, cheats, or unauthorized third-party software are strictly prohibited.',
+    'Exploiting bugs, glitches, or game errors is strictly prohibited.',
+    'If a player disconnects after the match starts, the match will continue and no rematch will be provided.',
+    'GFX Tools or unauthorized game-enhancement tools are strictly prohibited.',
+    'Organizers’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Mrs. Ujwala Bhosale',
+    phone: '9860082930',
   },
+  icon: Gamepad2,
+},
 
   {
-    id: 'pubg-squad',
-    name: 'PUBG Squad',
-    group: 'Gaming',
-    teamSize: 4,
-    accent: 'blue',
-    image: '/events/PUBG-Squad.jpg',
-    description: 'Four players. One strategy. No second chances.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Exactly 4 participants.',
-      'Match format will be shared soon.',
-    ],
-    faculty: ['Ujjwala Mam'],
-    icon: Gamepad2,
+  id: 'freefire-max-solo',
+  name: 'FREE FIRE MAX Solo',
+  group: 'Gaming',
+  teamSize: 1,
+  accent: 'orange',
+  image: '/events/free-fire.jpg',
+  description: 'Fast decisions for players who never back down.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Participants can register individually (Solo).',
+    'The competition will consist of 2 rounds of Free Fire MAX.',
+    'Participants must have their own internet connection. If any network issue occurs after the game has started, the college/organizers will not be responsible.',
+    'Participants are advised to use a reliable internet connection. Airtel SIM users are recommended for better connectivity.',
+    'Free Fire MAX must be installed and updated on the Android mobile phone before the competition.',
+    'Only Android phones are allowed. iPhones are not permitted.',
+    'If a player gets disconnected after the match has started, the match will continue, and no rematch will be provided.',
+    'Download all maps on your phone.',
+    'No character skills.',
+    'No gun skins.',
+    'DPI and Pointer must be set to default.',
+  ],
+  faculty: {
+    name: 'Mrs. Ujwala Bhosale',
+    phone: '9860082930',
   },
+  icon: Gamepad2,
+},
 
   {
-    id: 'freefire-solo',
-    name: 'Free Fire Solo',
-    group: 'Gaming',
-    teamSize: 1,
-    accent: 'orange',
-    image: '/events/free-fire.jpg',
-    description: 'Fast decisions for players who never back down.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'One participant per entry.',
-      'Match format will be shared soon.',
-    ],
-    faculty: ['Ujjwala Mam'],
-    icon: Gamepad2,
+  id: 'freefire-max-team',
+  name: 'FREE FIRE MAX Team',
+  group: 'Gaming',
+  teamSize: 4,
+  accent: 'orange',
+  image: '/events/freefire-squad.jpg',
+  description: 'Squad up and make your mark on the arena.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Participants can register as a group of 4 players.',
+    'The competition will consist of 2 rounds of Free Fire MAX.',
+    'Participants must have their own internet connection. If any network issue occurs after the game has started, the college/organizers will not be responsible.',
+    'Participants are advised to use a reliable internet connection. Airtel SIM users are recommended for better connectivity.',
+    'Free Fire MAX must be installed and updated on their Android mobile phone before the competition.',
+    'Only Android phones are allowed. iPhones are not permitted.',
+    'If a player gets disconnected after the match has started, the match will continue, and no rematch will be provided.',
+    'Download all maps on your phone.',
+    'No character skills.',
+    'No gun skins.',
+    'DPI and Pointer must be default.',
+  ],
+  faculty: {
+    name: 'Mrs. Ujwala Bhosale',
+    phone: '9860082930',
   },
+  icon: Gamepad2,
+},
 
   {
-    id: 'freefire-squad',
-    name: 'Free Fire Squad',
-    group: 'Gaming',
-    teamSize: 4,
-    accent: 'orange',
-    image: '/events/freefire-squad.jpg',
-    description: 'Squad up and make your mark on the arena.',
-    prize: 'Prize details to be announced',
+  id: 'quiz',
+  name: 'Quiz',
+  group: 'Challenge & Fun',
+  teamSize: 2,
+  accent: 'blue',
+  image: '/events/Quiz.jpg',
+  description: 'Fast minds, bold answers and one winning pair.',
+  prize: 'Exciting Cash Prizes',
     rules: [
-      'Exactly 4 participants.',
-      'Match format will be shared soon.',
-    ],
-    faculty: ['Ujjwala Mam'],
-    icon: Gamepad2,
+    'Maximum 2 participants per team.',
+    'Quiz topics: General Knowledge, Reasoning, and Current Affairs.',
+    'The competition will consist of 3 rounds.',
+    'Questions may include Multiple Choice, True/False, Specific-Answer, Rapid Fire, and other formats decided by the organizers.',
+    'Mobile phones are strictly prohibited.',
+    'Smart watches, Bluetooth devices, and other electronic devices are not allowed.',
+    'Judges’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Snehal Gidd',
+    phone: '9008484862',
   },
+  icon: Trophy,
+},
+
+{
+  id: 'treasure-hunt',
+  name: 'Treasure Hunt',
+  group: 'Challenge & Fun',
+  teamSize: 2,
+  accent: 'orange',
+  image: '/events/treasure-hunt.jpeg',
+  description: 'Decode clues. Chase the trail. Find the prize.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Exactly 2 participants per team.',
+    'The competition will consist of a series of clues, challenges, and tasks leading to the final treasure.',
+    'Participants must report at the designated starting point before the scheduled time.',
+    'Mobile phones may be used only if permitted by the organizers.',
+    'Participants must follow all safety instructions given by the organizers.',
+    'Judges’ / Organizing Committee’s decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Pallavi Mane',
+    phone: '+91 8762790801',
+  },
+  icon: ArrowDown,
+},
 
   {
-    id: 'quiz',
-    name: 'Quiz',
-    group: 'Challenge & Fun',
-    teamSize: 2,
-    accent: 'blue',
-    image: '/events/Quiz.jpg',
-    description: 'Fast minds, bold answers and one winning pair.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Teams of two participants.',
-      'Quiz format will be shared soon.',
-    ],
-    faculty: ['Snehal Mam'],
-    icon: Trophy,
+  id: 'tug-of-war',
+  name: 'Tug of War',
+  group: 'Challenge & Fun',
+  teamSize: 8,
+  accent: 'pink',
+  image: '/events/Tug-of-war.jpg',
+  description: 'Eight on a rope. One team left standing.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Each team must have exactly 8 members.',
+    'Both teams must have an equal number of players.',
+    'Participants must wear comfortable and suitable sportswear.',
+    'Participants should wear comfortable sports shoes for safety.',
+    'Participants must follow the instructions given by the organizers.',
+    'No pushing, kicking, tripping, or any unfair practice is allowed.',
+    'Judges’ / referees’ decision will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Ashwini Hirekudi',
+    phone: '9535001767',
   },
+  icon: Users,
+},
 
   {
-    id: 'treasure-hunt',
-    name: 'Treasure Hunt',
-    group: 'Challenge & Fun',
-    teamSize: 2,
-    accent: 'orange',
-    image: '/events/treasure-hunt.jpeg',
-    description: 'Decode clues. Chase the trail. Find the prize.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Teams of two participants.',
-      'Be ready to move around campus.',
-    ],
-    faculty: ['Pallavi Mam'],
-    icon: ArrowDown,
+  id: 'roadies',
+  name: 'ROADIES GAME',
+  group: 'Challenge & Fun',
+  teamSize: 2,
+  accent: 'pink',
+  image: '/events/roadies.jpg',
+  description: 'Courage, chaos and challenges that test everything.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Each team must consist of exactly 2 participants.',
+    'The Roadies Game will consist of multiple rounds and challenges.',
+    'All participants must strictly follow the instructions given by the organizers throughout the competition.',
+    'Each round will have its own specific rules and time limit, which must be followed by all participants.',
+    'Participants should wear comfortable and suitable clothing for the challenges.',
+    'The decision of the judges regarding scores, penalties, and elimination will be final and binding.',
+  ],
+  faculty: {
+    name: 'Varsha Khot',
+    phone: '+91 8792211479',
   },
+  icon: Zap,
+},
 
   {
-    id: 'tug-of-war',
-    name: 'Tug of War',
-    group: 'Challenge & Fun',
-    teamSize: 8,
-    accent: 'pink',
-    image: '/events/Tug-of-war.jpg',
-    description: 'Eight on a rope. One team left standing.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Exactly 8 participants.',
-      'Wear comfortable sportswear.',
-    ],
-    faculty: ['Ashwini Mam'],
-    icon: Users,
+  id: 'photography-and-videography',
+  name: 'PHOTOGRAPHY AND VIDEOGRAPHY',
+  group: 'Digital',
+  teamSize: 2,
+  accent: 'violet',
+  image: '/events/photo-reels.jpeg',
+  description:
+    'Capture the energy. Create the moment. Share the story.',
+  prize: 'Exciting Cash Prizes',
+  rules: [
+    'Theme: “On the Spot”.',
+    'Each team must have 2 participants.',
+    'The competition will have 2 rounds: Round 1 – Photography and Round 2 – Reel Making.',
+    'Participants must bring their own mobile phones (Android or iPhone).',
+    'Professional cameras/DSLR cameras are not allowed.',
+    'Photographs must be captured on the spot during the competition.',
+    'Reels must be created using content captured during the competition.',
+    'Previously captured photographs, videos, or downloaded content must not be used.',
+    'The decision of the judges will be final and binding.',
+  ],
+  faculty: {
+    name: 'Prof. Keerti Devakatte',
+    phone: '9740892360',
   },
-
-  {
-    id: 'roadies',
-    name: 'Roadies',
-    group: 'Challenge & Fun',
-    teamSize: 2,
-    accent: 'pink',
-    image: '/events/roadies.jpg',
-    description: 'Courage, chaos and challenges that test everything.',
-    prize: 'Prize details to be announced',
-    rules: [
-      '2 participants per group.',
-      'Challenge format will be shared soon.',
-    ],
-    faculty: ['Namrata Mam', 'Varsha Mam', 'Najima Mam', 'Anusha Mam'],
-    icon: Zap,
-  },
-
-  {
-    id: 'photo-reels',
-    name: 'Photo & Reels',
-    group: 'Digital',
-    teamSize: 2,
-    accent: 'violet',
-    image: '/events/photo-reels.jpeg',
-    description:
-      'Capture the energy. Create the moment. Share the story.',
-    prize: 'Prize details to be announced',
-    rules: [
-      'Teams of two participants.',
-      'Submission details will be shared soon.',
-    ],
-    faculty: ['Kirti Mam'],
-    icon: Camera,
-  },
+  icon: Camera,
+},
 ]
 
 const groups = [
@@ -556,11 +709,15 @@ const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${selected
                 </button>
 
                 <button
-                  className="button button-secondary"
-                  onClick={() => openRegister(EVENTS[0])}
-                >
-                  Register now
-                </button>
+  className="button button-secondary"
+  onClick={() =>
+    document
+      .getElementById('rules')
+      ?.scrollIntoView({ behavior: 'smooth' })
+  }
+>
+  View Rules & Guidelines
+</button>
               </div>
             </div>
 
@@ -631,6 +788,75 @@ const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${selected
               </div>
             ))}
           </section>
+          <section className="rules-section" id="rules">
+  <div className="rules-intro">
+    <p className="eyebrow">BEFORE YOU PARTICIPATE</p>
+
+    <h2>
+      General <em>Rules & Guidelines.</em>
+    </h2>
+
+    <p>
+      A few important things to know before registering.
+    </p>
+
+    
+  </div>
+
+  <div className="rules-list">
+    <div className="rule-item">
+      <span>01</span>
+      <p>Avishkar 5.0 is open to PU/HSC students (11th & 12th).</p>
+    </div>
+
+    <div className="rule-item">
+      <span>02</span>
+      <p>Participants must carry their valid college ID card.</p>
+    </div>
+
+    <div className="rule-item">
+      <span>03</span>
+      <p>
+        Participants should register at the Registration Committee
+        on the day of the fest.
+      </p>
+    </div>
+
+    <div className="rule-item">
+      <span>04</span>
+      <p>
+        Participants must follow the rules and guidelines of their
+        respective events.
+      </p>
+    </div>
+
+    <div className="rule-item">
+      <span>05</span>
+      <p>
+        Judges&apos; / Organizing Committee&apos;s decisions are final
+        and binding.
+      </p>
+    </div>
+
+    <div className="rule-item">
+      <span>06</span>
+      <p>
+        Refer to the detailed official rules document for complete
+        event-wise guidelines.
+      </p>
+    </div>
+  </div>
+
+  <a
+      href="/AVISHKAR-5.0-Rules.pdf"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="button button-secondary"
+    >
+      View Detailed Rules & Guidelines
+    </a>
+
+</section>
 
           <section className="about-section" id="about">
             <div>
@@ -642,27 +868,27 @@ const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${selected
             </div>
 
             <p>
-              One campus. Fifteen ways to stand out. AVISHKAR 5.0 is
+              One campus. Sixteen ways to stand out. AVISHKAR 5.0 is
               where ideas get loud, teams get competitive, and every
               participant gets their moment.
             </p>
           </section>
 
           <footer>
-            <div className="wordmark">
-              <span>AVISHKAR</span>
-              <b>5.0</b>
-            </div>
+  <div className="footer-brand">
+    <div className="hero-mark">
+      <span>AVISHKAR</span>
+      <b>5.0</b>
+    </div>
 
-            <p>KLE BCA COLLEGE, NIPANI</p>
+    <p>KLE BCA COLLEGE, NIPANI</p>
+  </div>
 
-            <span>
-              Registration information will be announced soon.
-            </span>
-            <a href="/admin" style={{ display: 'block', marginTop: '16px', color: '#666', textDecoration: 'underline' }}>
-              Organizer Admin Login
-            </a>
-          </footer>
+  <div className="developer-credit">
+    <span>Developed by </span>
+    <strong>Sakshi Swami &amp; Aniket Fagare</strong>
+  </div>
+</footer>
         </>
       )}
 
@@ -809,15 +1035,22 @@ function EventPreview({
           </p>
 
           <div className="preview-detail">
-            <h4>Faculty in-charge</h4>
+  <h4>Faculty in-charge</h4>
 
-            <p className="faculty-list">
-              {event.faculty.map((faculty) => (
-                <span key={faculty}>{faculty}</span>
-              ))}
-            </p>
-          </div>
+  <div className="faculty-contact">
+    <span className="faculty-name">
+      {event.faculty.name}
+    </span>
 
+    <a
+      href={`tel:${event.faculty.phone}`}
+      className="faculty-phone"
+    >
+      <Phone size={15} />
+      {event.faculty.phone}
+    </a>
+  </div>
+</div>
           <div className="preview-detail">
             <h4>Prize</h4>
 
@@ -835,6 +1068,14 @@ function EventPreview({
               ))}
             </ul>
           </div>
+              <a
+                href="/AVISHKAR-5.0-Rules.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button button-secondary wide"
+              >
+                View Guidelines & Rules
+              </a>
 
           <button
             className="button button-primary wide preview-register"
