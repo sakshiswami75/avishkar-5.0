@@ -538,6 +538,38 @@ export default function Page() {
     // Backend may be waking up.
   })
 }, [])
+useEffect(() => {
+  const handlePopState = () => {
+    if (screen === 'register') {
+      if (step === 3) {
+        setStep(2)
+        return
+      }
+
+      if (step === 2) {
+        setStep(1)
+        return
+      }
+
+      setSelected(null)
+      setScreen('home')
+      setStep(1)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    setSelected(null)
+    setScreen('home')
+    setStep(1)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  window.addEventListener('popstate', handlePopState)
+
+  return () => {
+    window.removeEventListener('popstate', handlePopState)
+  }
+}, [screen, step])
 
   const grouped = useMemo(
     () =>
@@ -549,14 +581,21 @@ export default function Page() {
   )
 
   const openRegister = (event: Event) => {
-    setSelected(event)
-    setParticipants(initialParticipants(event))
-    setCollege('')
-    setStep(1)
-    setErrors([])
-    setScreen('register')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  setSelected(event)
+  setParticipants(initialParticipants(event))
+  setCollege('')
+  setStep(1)
+  setErrors([])
+  setScreen('register')
+
+  window.history.pushState(
+    { screen: 'register', eventId: event.id },
+    '',
+    `#register-${event.id}`,
+  )
+
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
   const updateParticipant = (
     index: number,
@@ -1195,7 +1234,13 @@ function RegistrationFlow({
           }
 
           setErrors([]);
-          setStep(2);
+setStep(2);
+
+window.history.pushState(
+  { screen: 'register', step: 2 },
+  '',
+  `#register-${event.id}-step-2`,
+);
         }}
       >
         Continue
