@@ -714,7 +714,7 @@ const res = await fetch(`https://avishkar-5-0.onrender.com/api/events/${selected
                       ?.scrollIntoView({ behavior: 'smooth' })
                   }
                 >
-                  Explore events
+                  Register Now
                   <ArrowRight />
                 </button>
 
