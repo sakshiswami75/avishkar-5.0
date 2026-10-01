@@ -162,13 +162,15 @@ export const exportRegistrationsController = async (
       });
     });
 
-    const csvContent = rows
-      .map(row =>
-        row
-          .map(cell => `"${String(cell).replace(/"/g, '""')}"`)
-          .join(',')
-      )
-      .join('\n');
+    const csvContent =
+  '\uFEFF' +
+  rows
+    .map(row =>
+      row
+        .map(cell => `"${String(cell).replace(/"/g, '""')}"`)
+        .join(',')
+    )
+    .join('\n');
 
     res.setHeader('Content-Type', 'text/csv');
 
