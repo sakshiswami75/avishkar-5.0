@@ -123,30 +123,67 @@ export const getEventsSummaryController = async (req: Request, res: Response): P
     res.status(500).json({ success: false, message: 'Server error fetching summary' });
   }
 };
-export const exportRegistrationsController = async (req: Request, res: Response): Promise<void> => {
+export const exportRegistrationsController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const eventId = req.params.eventId as string;
+
     const registrations = await prisma.registration.findMany({
       where: { eventId },
       include: { participants: true },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
-    const rows = [['Registration ID', 'Event', 'College', 'Participant', 'Mobile', 'Standard', 'Registered At']];
-    
+    const rows = [
+      [
+        'Registration ID',
+        'Event',
+        'College',
+        'Participant',
+        'Mobile',
+        'Standard',
+        'Registered At',
+      ],
+    ];
+
     registrations.forEach(r => {
       r.participants.forEach(p => {
-        rows.push([r.id, r.eventName, r.college, p.name, p.mobile, p.standard, r.createdAt.toISOString()]);
+        rows.push([
+          r.id,
+          r.eventName,
+          r.college,
+          p.name,
+          p.mobile,
+          p.standard,
+          r.createdAt.toISOString(),
+        ]);
       });
     });
 
-    const csvContent = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
-    
+    const csvContent = rows
+      .map(row =>
+        row
+          .map(cell => `"${String(cell).replace(/"/g, '""')}"`)
+          .join(',')
+      )
+      .join('\n');
+
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename="${registrations[0]?.eventName || eventId}_Registrations.csv"`);
+
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${eventId}_Registrations.csv"`
+    );
+
     res.status(200).send(csvContent);
   } catch (error) {
     console.error('Export error:', error);
-    res.status(500).json({ success: false, message: 'Server error exporting registrations' });
+
+    res.status(500).json({
+      success: false,
+      message: 'Server error exporting registrations',
+    });
   }
 };

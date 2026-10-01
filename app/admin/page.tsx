@@ -199,18 +199,28 @@ const res = await fetch('https://avishkar-5-0.onrender.com/api/events/all/summar
               {filteredRegistrations.map(r => (
                 <article key={r.id}>
                   <div className="admin-list-head">
-                    <div>
-                      <span>{r.id}</span>
-                      <h2>{r.eventName}</h2>
-                      <p>{r.college}</p>
-                    </div>
-                    <button aria-label={`Delete ${r.id}`} onClick={() => remove(r.id)}><Trash2 /></button>
-                  </div>
+  <div>
+    <span>{r.id} · {r.eventName}</span>
+
+    <h2>
+      {r.participants[0]?.name || 'Participant'}
+    </h2>
+
+    <p>{r.college}</p>
+  </div>
+
+  <button
+    aria-label={`Delete ${r.id}`}
+    onClick={() => remove(r.id)}
+  >
+    <Trash2 />
+  </button>
+</div>
                   {r.participants.map((p, i) => (
                     <div className="admin-person" key={i}>
-                      <b>{p.name}</b>
-                      <span>{p.standard} · {p.mobile}</span>
-                    </div>
+  <span>{p.standard}</span>
+  <span>{p.mobile}</span>
+</div>
                   ))}
                 </article>
               ))}
