@@ -201,11 +201,6 @@ const res = await fetch('https://avishkar-5-0.onrender.com/api/events/all/summar
                   <div className="admin-list-head">
   <div>
     <span>{r.id} · {r.eventName}</span>
-
-    <h2>
-      {r.participants[0]?.name || 'Participant'}
-    </h2>
-
     <p>{r.college}</p>
   </div>
 
@@ -216,11 +211,15 @@ const res = await fetch('https://avishkar-5-0.onrender.com/api/events/all/summar
     <Trash2 />
   </button>
 </div>
-                  {r.participants.map((p, i) => (
-                    <div className="admin-person" key={i}>
-  <span>{p.standard}</span>
-  <span>{p.mobile}</span>
-</div>
+
+{r.participants.map((p, i) => (
+  <div className="admin-person" key={i}>
+    <b>{p.name}</b>
+    <span>
+      {p.standard} · {p.mobile}
+    </span>
+  </div>
+
                   ))}
                 </article>
               ))}
