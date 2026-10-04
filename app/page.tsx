@@ -357,7 +357,7 @@ const EVENTS: Event[] = [
   id: 'quiz',
   name: 'Quiz',
   group: 'Challenge & Fun',
-  teamSize: { min: 1, max: 2 },
+  teamSize: 2 ,
   accent: 'blue',
   image: '/events/Quiz.jpg',
   description: 'Fast minds, bold answers and one winning pair.',
