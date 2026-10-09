@@ -138,7 +138,6 @@ const res = await fetch('https://avishkar-5-0.onrender.com/api/events/all/summar
       <div className="admin-heading">
         <p className="eyebrow">PRIVATE ORGANIZER AREA</p>
         <h1>Registration <em>desk.</em></h1>
-        <p>Manage entries captured in this preview. Connect a backend before launch.</p>
       </div>
 
       {!activeEventId ? (
