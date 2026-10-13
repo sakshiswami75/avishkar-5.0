@@ -2527,6 +2527,21 @@ select:focus {
   flex-wrap: wrap;
 }
 
+.student-coordinator {
+  margin-top: 16px;
+}
+
+.student-coordinator h4 {
+  margin-bottom: 12px;
+}
+
+.student-coordinator .faculty-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
 .faculty-phone {
   display: inline-flex;
   align-items: center;

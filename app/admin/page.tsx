@@ -113,7 +113,6 @@ const res = await fetch('https://avishkar-5-0.onrender.com/api/events/all/summar
         <div className="admin-lock"><LogIn /></div>
         <p className="eyebrow">AVISHKAR 5.0 · ORGANIZER</p>
         <h1>Registration <em>desk.</em></h1>
-        <p>Private access for the festival team. Connect this gate to your production identity provider before launch.</p>
         <form onSubmit={signIn}>
           <label>Organizer email<input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@college.edu" /></label>
           <label>Password<input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" /></label>

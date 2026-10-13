@@ -1084,7 +1084,8 @@ function EventPreview({
             {event.description}
           </p>
 
-          <div className="preview-detail">
+        
+<div className="preview-detail">
   <h4>Faculty in-charge</h4>
 
   <div className="faculty-contact">
@@ -1100,7 +1101,51 @@ function EventPreview({
       {event.faculty.phone}
     </a>
   </div>
+
+  {/* FREE FIRE MAX Student Coordinator */}
+  {['freefire-max-solo', 'freefire-max-team'].includes(event.id) && (
+    <div className="student-coordinator">
+      <h4>Student Coordinator</h4>
+
+      <div className="faculty-contact">
+        <span className="faculty-name">
+          Aditya Killedar
+        </span>
+
+        <a
+          href="tel:+91 63601 78558"
+          className="faculty-phone"
+        >
+          <Phone size={15} />
+          +91 63601 78558
+        </a>
+      </div>
+    </div>
+  )}
+
+  {/* BGMI Student Coordinator */}
+  {['bgmi-solo', 'bgmi-squad'].includes(event.id) && (
+    <div className="student-coordinator">
+      <h4>Student Coordinator</h4>
+
+      <div className="faculty-contact">
+        <span className="faculty-name">
+          Abhinandan Khot
+        </span>
+
+        <a
+          href="tel:+91 63633 46054"
+          className="faculty-phone"
+        >
+          <Phone size={15} />
+          +91 63633 46054
+        </a>
+      </div>
+    </div>
+  )}
 </div>
+
+
           <div className="preview-detail">
             <h4>Prize</h4>
 
