@@ -137,30 +137,28 @@ export const exportRegistrationsController = async (
     });
 
     const rows = [
-      [
-        'Registration ID',
-        'Event',
-        'College',
-        'Participant',
-        'Mobile',
-        'Standard',
-        'Registered At',
-      ],
-    ];
+  [
+    'Registration ID',
+    'Event',
+    'College',
+    'Participant',
+    'Mobile',
+    'Standard',
+  ],
+];
 
-    registrations.forEach(r => {
-      r.participants.forEach(p => {
-        rows.push([
-          r.id,
-          r.eventName,
-          r.college,
-          p.name,
-          p.mobile,
-          p.standard,
-          r.createdAt.toISOString(),
-        ]);
-      });
-    });
+registrations.forEach(r => {
+  r.participants.forEach(p => {
+    rows.push([
+      r.id,
+      r.eventName,
+      r.college,
+      p.name,
+      p.mobile,
+      p.standard,
+    ]);
+  });
+});
 
     const csvContent =
   '\uFEFF' +
