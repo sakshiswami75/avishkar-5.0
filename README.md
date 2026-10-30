@@ -21,16 +21,6 @@ The website is designed for a real event-registration workflow: students choose 
 - Responsive layout with mobile navigation, responsive event grids, modal event previews, and mobile-friendly registration forms.
 - Vercel Analytics in production builds.
 
-## Screenshots
-
-Screenshots are not included in the repository. Add current captures here before publishing the portfolio version:
-
-> **Screenshot placeholder:** Student landing page and event lineup
->
-> **Screenshot placeholder:** Event details and registration form
->
-> **Screenshot placeholder:** Organizer registration desk
-
 ## Technology stack
 
 ### Frontend
